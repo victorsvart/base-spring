@@ -3,7 +3,6 @@ CREATE TABLE users (
     name varchar(255) UNIQUE NOT NULL,
     email varchar(255) UNIQUE NOT NULL,
     password varchar(255) NOT NULL,
-    role varchar(50) NOT NULL,
     is_account_non_expired boolean NOT NULL,
     is_account_non_locked boolean NOT NULL,
     is_credentials_non_expired boolean NOT NULL,

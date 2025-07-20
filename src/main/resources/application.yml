@@ -18,5 +18,5 @@ spring:
 security:
   jwt:
     issuer: yourissuer
-    secret-key: yousecret
+    secret-key: mysecret
     expiry-time-in-seconds: 86400

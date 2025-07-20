@@ -1,14 +1,23 @@
 package com.project.base.domain.user;
 
+import java.util.Set;
+
 import com.project.base.domain.base.Auditable;
 import com.project.base.domain.email.Email;
 import com.project.base.domain.name.Name;
 import com.project.base.domain.role.Role;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 @Entity()
@@ -18,14 +27,20 @@ public class User extends Auditable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private Name name;
   private Email email;
   private String password;
-  private Role role;
   private boolean isAccountNonExpired = true;
   private boolean isAccountNonLocked = true;
   private boolean isCredentialsNonExpired = true;
   private boolean isEnabled = true;
+
+  @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+  @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+  @Enumerated(EnumType.STRING)
+  @Column(name = "role")
+  private Set<Role> roles;
 
   protected User() {
   }
@@ -42,8 +57,8 @@ public class User extends Auditable {
     return password;
   }
 
-  public Role getRole() {
-    return this.role;
+  public Set<Role> getRoles() {
+    return roles;
   }
 
   public boolean isAccountNonExpired() {
@@ -66,7 +81,7 @@ public class User extends Auditable {
     private Name name;
     private Email email;
     private String password;
-    private Role role;
+    private Set<Role> roles;
 
     public Builder name(String name) {
       this.name = Name.of(name);
@@ -83,8 +98,8 @@ public class User extends Auditable {
       return this;
     }
 
-    public Builder role(Role role) {
-      this.role = role;
+    public Builder roles(Set<Role> roles) {
+      this.roles = roles;
       return this;
     }
 
@@ -93,7 +108,7 @@ public class User extends Auditable {
       user.name = this.name;
       user.email = this.email;
       user.password = this.password;
-      user.role = this.role;
+      user.roles = this.roles;
       return user;
     }
   }
